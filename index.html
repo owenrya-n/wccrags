@@ -494,38 +494,47 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
+// tier: 1 = visible at all zooms, 2 = zoom 6+, 3 = zoom 7+
 const crags = [
   // British Columbia
-  { name: "Squamish",            short: "Squamish",       lat: 49.7016, lon: -123.155, type: "Trad · Sport · Multi",  tags: ["granite","multipitch","trad","sport"] },
+  { name: "Squamish",            short: "Squamish",       lat: 49.7016, lon: -123.155, type: "Trad · Sport · Multi",   tags: ["granite","multipitch","trad","sport"],    tier: 1 },
   // Washington
-  { name: "Index",               short: "Index",           lat: 47.8243, lon: -121.555, type: "Trad · Crack",          tags: ["granite","crack","trad"] },
-  { name: "Darrington",          short: "Darrington",      lat: 48.2550, lon: -121.603, type: "Trad · Multi · Boulder", tags: ["granite","slab","multipitch","bouldering"] },
-  { name: "Washington Pass",     short: "WA Pass",         lat: 48.5194, lon: -120.657, type: "Alpine · Multi",        tags: ["granite","alpine","multipitch"] },
-  { name: "Mazama / Goat Wall",  short: "Mazama",          lat: 48.5920, lon: -120.409, type: "Sport · Multi",         tags: ["metamorphic","sport","multipitch"] },
-  { name: "Mt. Erie",            short: "Mt. Erie",        lat: 48.4710, lon: -122.628, type: "Sport",                 tags: ["diorite","sport","bellingham"] },
-  { name: "Leavenworth",         short: "Leavenworth",     lat: 47.5960, lon: -120.661, type: "Trad · Sport · Multi",  tags: ["granite","trad","sport","multipitch"] },
-  { name: "Peshastin Pinnacles", short: "Peshastin",       lat: 47.5630, lon: -120.590, type: "Trad · Slab",           tags: ["sandstone","slab","trad"] },
-  { name: "Beacon Rock",         short: "Beacon Rock",     lat: 45.6270, lon: -121.974, type: "Trad · Sport · Multi",  tags: ["basalt","trad","multipitch","bigwall"] },
-  { name: "Vantage",             short: "Vantage",         lat: 46.9490, lon: -119.987, type: "Sport",                 tags: ["basalt","sport","columnar"] },
-  { name: "Exit 32",             short: "Exit 32",         lat: 47.4450, lon: -121.715, type: "Trad · Crack",          tags: ["granite","trad","crack"] },
-  { name: "Exit 38",             short: "Exit 38",         lat: 47.3980, lon: -121.597, type: "Trad · Crack",          tags: ["granite","trad","crack"] },
-  { name: "Tieton River",        short: "Tieton",          lat: 46.6800, lon: -120.955, type: "Sport · Trad",          tags: ["andesite","sport","trad"] },
+  { name: "Index",               short: "Index",           lat: 47.8243, lon: -121.555, type: "Trad · Crack",           tags: ["granite","crack","trad"],                 tier: 2 },
+  { name: "Darrington",          short: "Darrington",      lat: 48.2550, lon: -121.603, type: "Trad · Multi · Boulder",  tags: ["granite","slab","multipitch","bouldering"],tier: 3 },
+  { name: "Washington Pass",     short: "WA Pass",         lat: 48.5194, lon: -120.657, type: "Alpine · Multi",          tags: ["granite","alpine","multipitch"],          tier: 2 },
+  { name: "Mazama / Goat Wall",  short: "Mazama",          lat: 48.5920, lon: -120.409, type: "Sport · Multi",           tags: ["metamorphic","sport","multipitch"],        tier: 3 },
+  { name: "Mt. Erie",            short: "Mt. Erie",        lat: 48.4710, lon: -122.628, type: "Sport",                   tags: ["diorite","sport","bellingham"],            tier: 3 },
+  { name: "Leavenworth",         short: "Leavenworth",     lat: 47.5960, lon: -120.661, type: "Trad · Sport · Multi",   tags: ["granite","trad","sport","multipitch"],    tier: 1 },
+  { name: "Peshastin Pinnacles", short: "Peshastin",       lat: 47.5630, lon: -120.590, type: "Trad · Slab",             tags: ["sandstone","slab","trad"],                tier: 3 },
+  { name: "Beacon Rock",         short: "Beacon Rock",     lat: 45.6270, lon: -121.974, type: "Trad · Sport · Multi",   tags: ["basalt","trad","multipitch","bigwall"],   tier: 2 },
+  { name: "Vantage",             short: "Vantage",         lat: 46.9490, lon: -119.987, type: "Sport",                   tags: ["basalt","sport","columnar"],              tier: 1 },
+  { name: "Exit 32",             short: "Exit 32",         lat: 47.4450, lon: -121.715, type: "Trad · Crack",            tags: ["granite","trad","crack"],                 tier: 3 },
+  { name: "Exit 38",             short: "Exit 38",         lat: 47.3980, lon: -121.597, type: "Trad · Crack",            tags: ["granite","trad","crack"],                 tier: 3 },
+  { name: "Tieton River",        short: "Tieton",          lat: 46.6800, lon: -120.955, type: "Sport · Trad",            tags: ["andesite","sport","trad"],                tier: 3 },
   // Oregon
-  { name: "Smith Rock",          short: "Smith Rock",      lat: 44.3676, lon: -121.143, type: "Sport · Trad",          tags: ["sport","trad","volcanic"] },
+  { name: "Smith Rock",          short: "Smith Rock",      lat: 44.3676, lon: -121.143, type: "Sport · Trad",            tags: ["sport","trad","volcanic"],                tier: 1 },
   // California - NorCal / Sierra
-  { name: "Table Mtn / Grotto",  short: "Grotto",          lat: 39.659,  lon: -121.622, type: "Sport · Trad",          tags: ["basalt","sport","trad"] },
-  { name: "Donner Summit",       short: "Donner",           lat: 39.3204, lon: -120.320, type: "Trad · Sport",          tags: ["granite","trad","sport"] },
-  { name: "Lover's Leap",        short: "Lovers Leap",     lat: 38.7961, lon: -120.147, type: "Trad · Multi",          tags: ["granite","multipitch","trad"] },
-  { name: "Mickey's Beach",      short: "Mickey's Bch",    lat: 37.9006, lon: -122.643, type: "Sport · Trad",          tags: ["schist","sport","coastal"] },
-  { name: "Mt. St. Helena",      short: "St. Helena",      lat: 38.6526, lon: -122.599, type: "Sport · Trad",          tags: ["volcanic","sport"] },
-  { name: "Tuolumne Meadows",    short: "Tuolumne",         lat: 37.8734, lon: -119.363, type: "Trad · Slab",          tags: ["granite","trad","slab"] },
-  { name: "Yosemite Valley",     short: "Yosemite",         lat: 37.7459, lon: -119.533, type: "Trad · Big Wall",      tags: ["granite","bigwall","multipitch"] },
-  { name: "Pinnacles",           short: "Pinnacles",        lat: 36.4906, lon: -121.182, type: "Sport · Multi",        tags: ["volcanic","multipitch","sport"] },
-  { name: "Castle Rock SP",      short: "Castle Rock",      lat: 37.2307, lon: -122.097, type: "Trad · Bouldering",    tags: ["sandstone","bouldering","trad"] },
+  { name: "Table Mtn / Grotto",  short: "Grotto",          lat: 39.659,  lon: -121.622, type: "Sport · Trad",            tags: ["basalt","sport","trad"],                  tier: 3 },
+  { name: "Donner Summit",       short: "Donner",           lat: 39.3204, lon: -120.320, type: "Trad · Sport",           tags: ["granite","trad","sport"],                 tier: 3 },
+  { name: "Lover's Leap",        short: "Lovers Leap",     lat: 38.7961, lon: -120.147, type: "Trad · Multi",            tags: ["granite","multipitch","trad"],            tier: 2 },
+  { name: "Mickey's Beach",      short: "Mickey's Bch",    lat: 37.9006, lon: -122.643, type: "Sport · Trad",            tags: ["schist","sport","coastal"],               tier: 3 },
+  { name: "Mt. St. Helena",      short: "St. Helena",      lat: 38.6526, lon: -122.599, type: "Sport · Trad",            tags: ["volcanic","sport"],                       tier: 3 },
+  { name: "Tuolumne Meadows",    short: "Tuolumne",         lat: 37.8734, lon: -119.363, type: "Trad · Slab",            tags: ["granite","trad","slab"],                  tier: 2 },
+  { name: "Yosemite Valley",     short: "Yosemite",         lat: 37.7459, lon: -119.533, type: "Trad · Big Wall",        tags: ["granite","bigwall","multipitch"],          tier: 1 },
+  { name: "Pinnacles",           short: "Pinnacles",        lat: 36.4906, lon: -121.182, type: "Sport · Multi",          tags: ["volcanic","multipitch","sport"],           tier: 3 },
+  { name: "Castle Rock SP",      short: "Castle Rock",      lat: 37.2307, lon: -122.097, type: "Trad · Bouldering",      tags: ["sandstone","bouldering","trad"],           tier: 3 },
   // California - SoCal / East
-  { name: "Bishop",              short: "Bishop",            lat: 37.3635, lon: -118.395, type: "Sport · Bouldering",  tags: ["granite","sport","bouldering"] },
-  { name: "Joshua Tree",         short: "J-Tree",            lat: 33.8734, lon: -115.901, type: "Trad · Bouldering",  tags: ["granite","trad","bouldering"] },
-  { name: "Red Rock Canyon",     short: "Red Rock",          lat: 36.1356, lon: -115.428, type: "Sport · Trad · Multi",tags: ["sandstone","sport","multipitch"] },
+  { name: "Bishop",              short: "Bishop",            lat: 37.3635, lon: -118.395, type: "Sport · Bouldering",   tags: ["granite","sport","bouldering"],            tier: 1 },
+  { name: "Joshua Tree",         short: "J-Tree",            lat: 33.8734, lon: -115.901, type: "Trad · Bouldering",   tags: ["granite","trad","bouldering"],             tier: 1 },
+  { name: "Tahquitz Rock",       short: "Tahquitz",          lat: 33.7432, lon: -116.678, type: "Trad · Multi",         tags: ["granite","multipitch","trad"],             tier: 2 },
+  { name: "Red Rock Canyon",     short: "Red Rock",          lat: 36.1356, lon: -115.428, type: "Sport · Trad · Multi", tags: ["sandstone","sport","multipitch"],           tier: 1 },
+  // Utah
+  { name: "Zion National Park",  short: "Zion",              lat: 37.2982, lon: -113.026, type: "Trad · Multi · Big Wall",tags: ["sandstone","bigwall","multipitch","trad"],tier: 1 },
+  { name: "Indian Creek",        short: "Indian Creek",      lat: 37.9167, lon: -109.600, type: "Trad · Crack",          tags: ["sandstone","crack","trad"],               tier: 1 },
+  { name: "American Fork Canyon",short: "Am. Fork",          lat: 40.4290, lon: -111.714, type: "Sport",                 tags: ["limestone","sport"],                      tier: 2 },
+  { name: "Little Cottonwood Canyon", short: "LCC",          lat: 40.5710, lon: -111.797, type: "Trad · Sport · Alpine", tags: ["granite","trad","sport","alpine"],        tier: 2 },
+  { name: "Big Cottonwood Canyon",short: "BCC",              lat: 40.6200, lon: -111.778, type: "Trad · Sport",          tags: ["granite","trad","sport"],                 tier: 3 },
+  { name: "Wall Street (Moab)",  short: "Wall St.",          lat: 38.5850, lon: -109.550, type: "Sport",                 tags: ["sandstone","sport","moab"],               tier: 2 },
 ];
 
 function decodeWMO(code) {
@@ -540,10 +549,12 @@ function decodeWMO(code) {
   return                  { icon: "⛈️",  label: "Thunderstorm" };
 }
 
-function getStatus(precip, wmo) {
+function getStatus(precip, wmo, tmax) {
   const isDry = wmo <= 3;
   if (!isDry || precip > 1)  return "nogo";
+  if (tmax >= 95)            return "nogo";      // dangerously hot
   if (precip > 0.05)         return "marginal";
+  if (tmax >= 85)            return "marginal";  // hot but climbable early morning
   return "go";
 }
 
@@ -555,7 +566,7 @@ let openIdx = null;
 const today = new Date();
 
 // Map
-const map = L.map('map', { center: [43.5, -120.5], zoom: 5, zoomControl: false });
+const map = L.map('map', { center: [42.0, -118.0], zoom: 5, zoomControl: false });
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '© OpenStreetMap © Carto', subdomains: 'abcd', maxZoom: 19
@@ -601,12 +612,30 @@ function makePinEl(crag, idx) {
 function setDotStatus(el, daily) {
   const dot = el.querySelector('.pin-dot');
   if (!daily) { dot.className = 'pin-dot loading'; return; }
-  const s = getStatus(daily.precipitation_sum[selectedDay] || 0, daily.weathercode[selectedDay]);
+  const s = getStatus(daily.precipitation_sum[selectedDay] || 0, daily.weathercode[selectedDay], daily.temperature_2m_max[selectedDay]);
   dot.className = `pin-dot ${s}`;
 }
 
 function refreshAllDots() {
   markerData.forEach(({ el, idx }) => setDotStatus(el, weatherCache[idx]));
+}
+
+function isVisible(crag) {
+  const z = map.getZoom();
+  if (crag.tier === 1) return true;
+  if (crag.tier === 2) return z >= 6;
+  if (crag.tier === 3) return z >= 7;
+  return true;
+}
+
+function updateVisibility() {
+  markerData.forEach(({ marker, crag }) => {
+    if (isVisible(crag)) {
+      if (!map.hasLayer(marker)) map.addLayer(marker);
+    } else {
+      if (map.hasLayer(marker)) map.removeLayer(marker);
+    }
+  });
 }
 
 function createMarkers() {
@@ -615,7 +644,9 @@ function createMarkers() {
     const marker = L.marker([crag.lat, crag.lon], {
       icon: L.divIcon({ className: '', html: el, iconAnchor: [5, 5] }),
       zIndexOffset: 100,
-    }).addTo(map);
+    });
+    // only add to map if visible at current zoom
+    if (isVisible(crag)) marker.addTo(map);
     markerData.push({ marker, el, crag, idx });
 
     fetchWeather(crag, idx).then(daily => {
@@ -632,6 +663,8 @@ function createMarkers() {
       el.querySelector('.pin-dot').className = 'pin-dot nogo';
     });
   });
+
+  map.on('zoomend', updateVisibility);
 }
 
 function showPanel(idx) {
@@ -663,7 +696,7 @@ function showPanel(idx) {
   const precip = daily.precipitation_sum[selectedDay] || 0;
   const wind   = Math.round(daily.windspeed_10m_max[selectedDay]);
   const info   = decodeWMO(wmo);
-  const status = getStatus(precip, wmo);
+  const status = getStatus(precip, wmo, tmax);
 
   const d = new Date(today); d.setDate(d.getDate() + selectedDay);
   const dateStr = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
@@ -679,8 +712,8 @@ function showPanel(idx) {
   pill.className = `panel-status-pill ${status}`;
   document.getElementById('panelPillText').textContent =
     status === 'go' ? 'Conditions look good' :
-    status === 'marginal' ? 'Marginal — check before going' :
-    'No-Go — rain or snow';
+    status === 'marginal' ? (tmax >= 85 && precip <= 0.05 ? 'Hot — go early morning' : 'Marginal — check before going') :
+    (tmax >= 95 ? 'No-Go — too hot' : 'No-Go — rain or snow');
 
   document.getElementById('panelTags').innerHTML =
     crag.tags.map(t => `<span class="tag">${t}</span>`).join('');
